@@ -152,7 +152,7 @@ sup {
 }
 
 a {
-  color: #9cc3d5;
+  color: #004cbe;
   text-decoration: none;
   background-color: transparent;
 }
@@ -5995,17 +5995,17 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #9cc3d5 !important;
+  background-color: #000000 !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
-  background-color: #78adc6 !important;
+  background-color: #6c757d !important;
 }
 
 .bg-secondary {
-  background-color: #0063b2 !important;
+  background-color: #212529  !important;
 }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
@@ -9901,9 +9901,9 @@ h3 {
   width: 100%;
   max-width: 7rem;
   height: 0.25rem;
-  background-color: #0063b2;
+  background-color: #000000;
   border-radius: 1rem;
-  border-color: #0063b2 !important;
+  border-color: #000000 !important;
 }
 .divider-custom .divider-custom-line:first-child {
   margin-right: 1rem;
@@ -9912,7 +9912,7 @@ h3 {
   margin-left: 1rem;
 }
 .divider-custom .divider-custom-icon {
-  color: #0063b2 !important;
+  color: #000000 !important;
   font-size: 2rem;
 }
 .divider-custom.divider-light .divider-custom-line {
@@ -10051,7 +10051,7 @@ h3 {
   left: 0;
   transition: all 0.2s ease-in-out;
   opacity: 0;
-  background-color: rgba(156, 195, 213, 0.9);
+  background-color: rgb(0 0 0 / 50%);
 }
 .portfolio .portfolio-item .portfolio-item-caption:hover {
   opacity: 1;
@@ -10133,12 +10133,12 @@ form .row:first-child .floating-label-form-group {
 .footer {
   padding-top: 5rem;
   padding-bottom: 5rem;
-  background-color: #0063b2;
+  background-color: #000000;
   color: #fff;
 }
 
 .copyright {
-  background-color: #00477f;
+  background-color: #343a40;
 }
 
 #brandImage {
@@ -10169,7 +10169,7 @@ form .row:first-child .floating-label-form-group {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  background-color: #9cc3d5;
+  background-color: #212529;
   color: #fff;
   border-radius: 100%;
 }
