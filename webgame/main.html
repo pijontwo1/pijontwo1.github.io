@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            color: rgb(202, 202, 202);
+        }
+
+        #c1 {
+            text-align: center;
+            border: 1px solid white;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="c1">asdfafd</div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyBl5Icv-vhH-Q9TVSC01z5SiEuUZ3DJ5YA",
+          authDomain: "pijontwo1-3248d.firebaseapp.com",
+          projectId: "pijontwo1-3248d",
+          storageBucket: "pijontwo1-3248d.appspot.com",
+          messagingSenderId: "455619009415",
+          appId: "1:455619009415:web:89b51d8e6ad0f4341c1122",
+          measurementId: "G-WXSBRVGSLQ"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>
+</body>
+
+</html>
