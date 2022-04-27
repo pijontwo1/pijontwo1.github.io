@@ -1,0 +1,346 @@
+import Link from "next/link";
+import Layout from "../components/Layout";
+import React from "react";
+import styled from "styled-components";
+import Pagination from "@material-ui/lab/Pagination";
+import { BiConversation } from "react-icons/bi";
+
+import {
+  Box,
+  Accordion,
+  Typography,
+  AccordionSummary,
+  AccordionDetails,
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+class Inquire extends React.Component {
+  state = {
+    data: [],
+    rows: [],
+    numberOfRows: 10,
+    page: "",
+    total: null,
+    nowPage: 0,
+  };
+
+  // 페이지 로딩후 한번만 실행
+  componentDidMount() {
+    fetch(process.env.LocalHost + "/inquire", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        nowPage: this.state.nowPage,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          data: res,
+          total: Math.ceil(res[0].id / 10),
+        });
+      });
+  }
+
+  statusSwitch(params) {
+    switch (params) {
+      case 0:
+        return "대기중";
+        break;
+      case 1:
+        return "완료";
+        break;
+      default:
+        return "점검중입니다.";
+        break;
+    }
+  }
+
+  render() {
+    const { data } = this.state;
+
+    const AccordionBorder = {
+      border: "1px solid #eeeeee",
+    };
+    const AnswerTitleStyle = {
+      padding: "20px 0",
+      fontWeight: "bold",
+      fontSize: "20px",
+    };
+
+    const AnswerSubStyle = {
+      padding: "0 0 10px 10px",
+      fontSize: "12px",
+      color: "#606060",
+      fontWeight: "normal",
+    };
+    const AnswerContentStyle = {
+      padding: "20px 0 50px 0",
+      // borderTop: "1px solid #ccc",
+      width: "1000px",
+      fontSize: "15px",
+      fontFamily: "sans-serif",
+    };
+
+    const PagingNumStyle = {
+      margin: "0 auto",
+      display: "flex",
+      justifyContent: "center",
+    };
+
+    const ConversationStyle = {
+      verticalAlign: "middle",
+      display: "inline-block",
+    };
+
+    const TTd = styled.td`
+      min-height: 20px;
+      padding: 3px 3px;
+      background-color: #fff;
+      text-align: center;
+      overflow: hidden;
+      line-height: 2.5;
+      color: #333;
+      transition: all 0.3s;
+      font-size: 13px;
+      font-weight: 600;
+    `;
+
+    const TTd2 = styled(TTd)`
+      text-align: end;
+    `;
+
+    // 게시판 반복문 start
+    const contents = data.map((inquiredatas, index) => {
+      return (
+        <tr key={inquiredatas.id}>
+          <td colSpan="6">
+            <Accordion style={AccordionBorder} defaultExpanded={false}>
+              <Box clone p={0} m={0}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Box clone p={0} m={0}>
+                    <Typography component={"div"}>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <TTd width="60px">{inquiredatas.id}</TTd>
+                            <TTd width="585px">{inquiredatas.title}</TTd>
+                            <TTd width="125px">{inquiredatas.name}</TTd>
+                            <TTd width="135px">
+                              {inquiredatas.create_datetime}
+                            </TTd>
+
+                            <TTd2 width="80px">
+                              {this.statusSwitch(
+                                inquiredatas.processing_status
+                              )}
+                            </TTd2>
+
+                            {/* {this.statusSwitch(
+                              inquiredatas.processing_status
+                            ) == 0 ? (
+                              <TTd2 style="color:#ff0;" width="80px">
+                                {this.statusSwitch(
+                                  inquiredatas.processing_status
+                                )}
+                              </TTd2>
+                            ) : (
+                              <TTd2 width="80px">
+                                {this.statusSwitch(
+                                  inquiredatas.processing_status
+                                )}
+                              </TTd2>
+                            )} */}
+                          </tr>
+                        </tbody>
+                      </table>
+                    </Typography>
+                  </Box>
+                </AccordionSummary>
+              </Box>
+              <AccordionDetails>
+                <Typography component={"div"}>
+                  {/* 작성자 */}
+                  <div>
+                    <div style={AnswerTitleStyle}>{inquiredatas.title}</div>
+                  </div>
+                  <div style={AnswerSubStyle}>
+                    <div>
+                      글쓴이 : {inquiredatas.name} &emsp;&emsp;&emsp;&emsp;
+                      작성일 : {inquiredatas.create_datetime}
+                    </div>
+                  </div>
+                  <div>
+                    {/* <div style={AnswerContentStyle}>{inquiredatas.content}</div> */}
+                    <pre style={AnswerContentStyle}>{inquiredatas.content}</pre>
+                  </div>
+                  {/* 답변 */}
+                  <div>
+                    {inquiredatas.processing_member == "미확인" ? (
+                      <div style={AnswerTitleStyle}>
+                        &emsp;답변 대기중입니다.
+                      </div>
+                    ) : (
+                      <>
+                        <div style={AnswerTitleStyle}>
+                          {inquiredatas.processing_title}
+                        </div>
+                        <div style={AnswerSubStyle}>
+                          <div>
+                            담당자 :{inquiredatas.processing_member}
+                            &emsp;&emsp;&emsp;&emsp;
+                          </div>
+                        </div>
+                        <div>
+                          <pre style={AnswerContentStyle}>
+                            {inquiredatas.processing_content}
+                          </pre>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </td>
+        </tr>
+      );
+    });
+
+    // 게시판 반복문 end
+
+    // 페이징 onChange start
+    const handleChangepage = (e, newPage) => {
+      console.log(newPage * 10 - 10);
+      this.state.nowPage = newPage * 10 - 10;
+
+      fetch(process.env.LocalHost + "/inquire", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          nowPage: newPage * 10 - 10,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          this.setState({
+            data: res,
+          });
+        });
+    };
+    // 페이징  onChange end
+
+    return (
+      <Layout>
+        <style jsx>{`
+          body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          body::-webkit-scrollbar {
+            display: none;
+          }
+          .inquireH1 {
+            display: block;
+            font-size: 2em;
+            margin-block-start: 0.67em;
+            margin-block-end: 0.67em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+          }
+          .inquireTableBody {
+            margin: 50px auto;
+            width: 1000px;
+          }
+          .inquireTable {
+            border-top: 2px solid #1199ff;
+            border-bottom: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+            border-left: 1px solid #dddddd;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+          .inquireTableTh {
+            padding: 5px 0;
+            background-color: #eeeeee;
+            color: #666;
+            text-align: center;
+            line-height: 2.5;
+            font-size: 13px;
+            font-weight: bold;
+          }
+          .inquireButtonWrite {
+            width: 150px;
+            height: 35px;
+            float: right;
+            border: 0;
+            background-color: #1199ff;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 5px;
+          }
+        `}</style>
+
+        <div className="inquireTableBody">
+          <h1 className="inquireH1">
+            &nbsp;&nbsp;&nbsp;온라인 문의{" "}
+            <BiConversation style={ConversationStyle} />
+          </h1>
+          <table
+            className="inquireTable"
+            cellPadding="0"
+            cellSpacing="0"
+            border="0"
+          >
+            <tbody>
+              <tr>
+                <td width="50px" className="inquireTableTh">
+                  번호
+                </td>
+                <td width="450px" className="inquireTableTh">
+                  제목
+                </td>
+                <td width="100px" className="inquireTableTh">
+                  글쓴이
+                </td>
+                <td width="100px" className="inquireTableTh">
+                  날짜
+                </td>
+                <td width="70px" className="inquireTableTh">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;처리상태
+                </td>
+                <td width="30px" className="inquireTableTh"></td>
+              </tr>
+              {/* 게시글start */}
+              {contents}
+              {/* 게시글 end */}
+            </tbody>
+          </table>
+          <Link href="/inquireWrite">
+            <button className="inquireButtonWrite">글쓰기</button>
+          </Link>
+          <Pagination
+            component="div"
+            style={PagingNumStyle}
+            count={this.state.total}
+            onChange={handleChangepage}
+            defaultPage={1}
+          />
+        </div>
+      </Layout>
+    );
+  }
+}
+
+export default Inquire;

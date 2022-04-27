@@ -1,0 +1,340 @@
+import Link from "next/link";
+import Layout from "../components/Layout";
+import React, { useRef } from "react";
+import styled from "styled-components";
+import { BiConversation } from "react-icons/bi";
+
+const Conversation = styled(BiConversation)`
+  height: 40px;
+  width: 28px;
+`;
+
+class inquireWrite extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      name: "",
+      password: "",
+      title: "",
+      useage: "",
+      price: "",
+      phone: "",
+      email: "",
+      content: "",
+      form_datas: [],
+    };
+    this.nameInput = React.createRef();
+    this.passwordInput = React.createRef();
+    this.titleInput = React.createRef();
+    this.priceInput = React.createRef();
+    this.phoneInput = React.createRef();
+    this.emailInput = React.createRef();
+    this.contentInput = React.createRef();
+  }
+
+  nameChange = (e) => {
+    if (e.target.value.length > 10) {
+      e.target.value = e.target.value.slice(0, 10);
+    }
+    this.setState({ name: e.target.value });
+  };
+
+  passwordChange = (e) => {
+    if (e.target.value.length > 20) {
+      e.target.value = e.target.value.slice(0, 20);
+    }
+    this.setState({ password: e.target.value });
+  };
+  titleChange = (e) => {
+    if (e.target.value.length > 30) {
+      e.target.value = e.target.value.slice(0, 30);
+    }
+    this.setState({ title: e.target.value });
+  };
+  useageChange = (e) => {
+    this.setState({ useage: e.target.value });
+  };
+  priceChange = (e) => {
+    if (e.target.value.length > 10) {
+      e.target.value = e.target.value.slice(0, 10);
+    }
+    this.setState({ price: e.target.value });
+  };
+  phoneChange = (e) => {
+    if (e.target.value.length > 20) {
+      e.target.value = e.target.value.slice(0, 20);
+    }
+    this.setState({ phone: e.target.value });
+  };
+  emailChange = (e) => {
+    console.log(e.target.value);
+    if (e.target.value.length > 50) {
+      e.target.value = e.target.value.slice(0, 20);
+    }
+    this.setState({ email: e.target.value });
+  };
+  contentChange = (e) => {
+    if (e.target.value.length > 1000) {
+      e.target.value = e.target.value.slice(0, 1000);
+    }
+    this.setState({ content: e.target.value });
+  };
+  handleFormSubmit = (e) => {
+    if (this.state.name == "") {
+      e.preventDefault();
+      alert("이름을 입력해주세요");
+      this.nameInput.current.focus();
+    } else if (this.state.password == "") {
+      e.preventDefault();
+      alert("비밀번호을 입력해주세요");
+      this.passwordInput.current.focus();
+    } else if (this.state.title == "") {
+      e.preventDefault();
+      alert("제목을 입력해주세요");
+      this.titleInput.current.focus();
+    } else if (this.state.useage == "") {
+      e.preventDefault();
+      alert("용도를 선택해주세요");
+    } else if (this.state.price == "") {
+      e.preventDefault();
+      alert("희망가격을 입력해주세요 (없을경우 0 입력)");
+      this.priceInput.current.focus();
+    } else if (this.state.phone == "") {
+      e.preventDefault();
+      alert("연락처를 입력해주세요");
+      this.phoneInput.current.focus();
+    } else if (this.state.email == "") {
+      e.preventDefault();
+      alert("이메일을 입력해주세요");
+      this.emailInput.current.focus();
+    } else if (this.state.content == "") {
+      e.preventDefault();
+      alert("내용을 입력해주세요");
+      this.contentInput.current.focus();
+    } else {
+      fetch(process.env.LocalHost + "/inquireWrite", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: this.state.name,
+          password: this.state.password,
+          title: this.state.title,
+          useage: this.state.useage,
+          price: this.state.price,
+          phone: this.state.phone,
+          email: this.state.email,
+          content: this.state.content,
+        }),
+      }).then((res) => {
+        res.json();
+        alert("등록완료");
+        location.href = "/inquire";
+      });
+    }
+  };
+  render() {
+    return (
+      <Layout>
+        <style jsx>{`
+          h1 {
+            font-size: 25px;
+            font-weight: bold;
+            display: flex;
+          }
+          .TableBody {
+            margin: 50px auto;
+            width: 1000px;
+          }
+          .Table {
+            border-top: 2px solid #1199ff;
+            border-bottom: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+            border-left: 1px solid #dddddd;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+          .TableTitle {
+            width: 100px;
+            min-height: 20px;
+            padding: 3px 20px;
+            background-color: #fff;
+            border-top: 1px solid #dddddd;
+            border-left: 1px solid #dddddd;
+            overflow: hidden;
+            line-height: 2.5;
+            color: #333;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 600;
+          }
+          .TableTd {
+            border-top: 1px solid #dddddd;
+          }
+          .ButtonWrite {
+            width: 150px;
+            height: 35px;
+            float: right;
+            border: 0;
+            background-color: #1199ff;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 5px;
+          }
+          .TableInput {
+            width: 300px;
+            border: 1px solid #dddddd;
+          }
+          .TableTextarea {
+            width: 700px;
+            height: 200px;
+            border: 1px solid #dddddd;
+            margin: 10px 0;
+          }
+        `}</style>
+
+        <div className="TableBody">
+          <h1>
+            &nbsp;온라인 문의
+            <Conversation />
+          </h1>
+          <form onSubmit={this.handleFormSubmit}>
+            <table className="Table" cellPadding="0" cellSpacing="0" border="0">
+              <thead></thead>
+              <tbody>
+                {/* 게시글start */}
+                <tr>
+                  <td className="TableTitle">이름</td>
+                  <td className="TableTd">
+                    <input
+                      className="TableInput"
+                      onChange={this.nameChange}
+                      name="name"
+                      ref={this.nameInput}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">패스워드</td>
+                  <td className="TableTd">
+                    <input
+                      type="password"
+                      className="TableInput"
+                      onChange={this.passwordChange}
+                      name="password"
+                      ref={this.passwordInput}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">제목</td>
+                  <td className="TableTd">
+                    <input
+                      className="TableInput"
+                      onChange={this.titleChange}
+                      name="title"
+                      ref={this.titleInput}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">용도</td>
+                  <td className="TableTd">
+                    <input
+                      type="radio"
+                      name="usage"
+                      value="1"
+                      checked={this.state.useage === "1"}
+                      onChange={this.useageChange}
+                    />
+                    일반
+                    <input
+                      type="radio"
+                      name="usage"
+                      value="2"
+                      checked={this.state.useage === "2"}
+                      onChange={this.useageChange}
+                    />
+                    게임용
+                    <input
+                      type="radio"
+                      name="usage"
+                      value="3"
+                      checked={this.state.useage === "3"}
+                      onChange={this.useageChange}
+                    />
+                    사무용
+                    <input
+                      type="radio"
+                      name="usage"
+                      value="4"
+                      checked={this.state.useage === "4"}
+                      onChange={this.useageChange}
+                    />
+                    기타
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">희망가격</td>
+                  <td className="TableTd">
+                    <input
+                      type="number"
+                      className="TableInput"
+                      onChange={this.priceChange}
+                      name="price"
+                      ref={this.priceInput}
+                      pattern="[0-9]+"
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">연락처</td>
+                  <td className="TableTd">
+                    <input
+                      className="TableInput"
+                      onChange={this.phoneChange}
+                      name="phone"
+                      ref={this.phoneInput}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">이메일</td>
+                  <td className="TableTd">
+                    <input
+                      className="TableInput"
+                      onChange={this.emailChange}
+                      name="email"
+                      ref={this.emailInput}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="TableTitle">내용</td>
+                  <td className="TableTd">
+                    <textarea
+                      className="TableTextarea"
+                      onChange={this.contentChange}
+                      name="content"
+                      ref={this.contentInput}
+                    ></textarea>
+                  </td>
+                </tr>
+
+                {/* 게시글 end */}
+              </tbody>
+            </table>
+            {/* <Link href="/inquire"> */}
+            <button type="submit" className="ButtonWrite">
+              작성완료
+            </button>
+            {/* </Link> */}
+          </form>
+        </div>
+      </Layout>
+    );
+  }
+}
+
+export default inquireWrite;
